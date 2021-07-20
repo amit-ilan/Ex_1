@@ -1,0 +1,4 @@
+<resources>
+    <string name="rationale_contact">This app needs access to your contact to know you better</string>
+    <string name="app_name">contactsapp</string>
+</resources>
