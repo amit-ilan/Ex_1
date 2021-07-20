@@ -3,6 +3,7 @@ package com.example.contactsapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,8 +27,12 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.provider.ContactsContract;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +46,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-public class MainActivity extends AppCompatActivity implements ContactClickListener {
+public class MainActivity extends AppCompatActivity implements ContactClickListener, EasyPermissions.PermissionCallbacks {
 
     public static final String EXTRA_CONTACT_NAME = "EXTRA.CONTACT_NAME";
     public static final String EXTRA_CONTACT_MAIL = "EXTRA.CONTACT_MAIL";
@@ -57,7 +62,12 @@ public class MainActivity extends AppCompatActivity implements ContactClickListe
         setContentView(R.layout.activity_main);
 
         setContactPermission();
-        loadContacts();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setContactPermission();
     }
 
     @AfterPermissionGranted(CONTACT_PERMISSION)
@@ -68,9 +78,30 @@ public class MainActivity extends AppCompatActivity implements ContactClickListe
             init(loadContacts().toArray(new Contact[0]));
         } else {
             // Do not have permissions, request them now
-            EasyPermissions.requestPermissions(this, getString(R.string.rationale_contact),
-                    CONTACT_PERMISSION, perms);
+            EasyPermissions.requestPermissions(this, getString(R.string.rationale_contact), CONTACT_PERMISSION, perms);
         }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull @NotNull List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        //Toast.makeText(getApplicationContext(),"Permissions required",Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.rvContacts), "Permission required", Snackbar.LENGTH_LONG)
+                    .setAction("GO TO SETTINGS", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    });
+
+            snackbar.show();
     }
 
     private Collection<Contact> loadContacts(){
