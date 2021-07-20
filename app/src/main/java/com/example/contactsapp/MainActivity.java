@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements ContactClickListe
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CustomAdapter(contacts, this, getApplicationContext());
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override
