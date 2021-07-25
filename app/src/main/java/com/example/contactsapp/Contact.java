@@ -7,12 +7,14 @@ public class Contact implements Serializable {
     private String mail;
     private String phone;
     private String img;
+    private String deviceId;
 
-    public Contact(String name, String mail, String phone, String img){
+    public Contact(String name, String mail, String phone, String img, String deviceId){
         this.name = name;
         this.mail = mail;
         this.phone = phone;
         this.img = img;
+        this.deviceId = deviceId;
     }
 
     public String getImg() {
@@ -31,6 +33,10 @@ public class Contact implements Serializable {
         return phone;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
     public void setImg(String img) {
         this.img = img;
     }
@@ -47,4 +53,7 @@ public class Contact implements Serializable {
         this.phone = phone;
     }
 
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
 }

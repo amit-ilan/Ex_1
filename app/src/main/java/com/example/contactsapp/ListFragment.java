@@ -97,8 +97,9 @@ public class ListFragment extends Fragment implements ContactClickListener{
         String phone = contact.getPhone();
         String mail = contact.getMail();
         String img = contact.getImg();
+        String id = contact.getDeviceId();
 
-        Bundle bundle = DetailsFragment.getBundle(name,phone,mail,img);
+        Bundle bundle = DetailsFragment.getBundle(name,phone,mail,img, id);
         navController.navigate(R.id.action_listFragment_to_detailsFragment, bundle);
     }
 }

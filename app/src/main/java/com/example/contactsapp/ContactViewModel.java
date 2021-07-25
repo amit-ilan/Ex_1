@@ -1,18 +1,16 @@
 package com.example.contactsapp;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -23,15 +21,11 @@ public class ContactViewModel extends ViewModel {
     public static final String EXTRA_CONTACT_PHONE = "EXTRA.CONTACT_PHONE";
     public static final String EXTRA_CONTACT_IMG = "EXTRA.CONTACT_IMG";
 
-    private final MutableLiveData<List<Contact>> contacts = new MutableLiveData<>();
+    private final MutableLiveData<List<Contact>> contactsLiveData = new MutableLiveData<>();
+    private HashMap<String, Contact> contactsMap = new HashMap<>();
+    private List<String> hiddenContacts = new ArrayList<>();
 
-    public void onListStart(Context context, boolean havePerm){
-
-        if(!havePerm){
-            //update ui?
-            return; // exit
-        }
-
+    public void onListStart(Context context){
         @SuppressLint("Recycle") Cursor cursor = context.getContentResolver().query(
                 ContactsContract.Contacts.CONTENT_URI,
                 null,
@@ -39,7 +33,7 @@ public class ContactViewModel extends ViewModel {
                 null,null
         );
 
-        List<Contact> loadedContacts = new ArrayList<>();
+        HashMap<String, Contact> loadedContacts = new HashMap<>();
 
         if (cursor != null) {
             String phone = null;
@@ -72,17 +66,28 @@ public class ContactViewModel extends ViewModel {
                             ContactsContract.CommonDataKinds.Email.ADDRESS));
                 }
 
-                loadedContacts.add(new Contact(cursor.getString(nameIndex),
-                        email,
-                        phone,
-                        cursor.getString(imgIndex)));
+                if (!hiddenContacts.contains(id)) {
+
+                    loadedContacts.put(id, new Contact(cursor.getString(nameIndex),
+                            email,
+                            phone,
+                            cursor.getString(imgIndex),
+                            id));
+                }
             }
         }
 
-        this.contacts.setValue(loadedContacts);
+        this.contactsMap = loadedContacts;
+        this.contactsLiveData.setValue(new ArrayList<>(loadedContacts.values()));
+    }
+
+    public void onHideContact(String contactId){
+        this.hiddenContacts.add(contactId);
+        this.contactsMap.remove(contactId);
+        this.contactsLiveData.setValue(new ArrayList<>(this.contactsMap.values()));
     }
 
     public LiveData<List<Contact>> getContacts(){
-        return this.contacts;
+        return this.contactsLiveData;
     }
 }

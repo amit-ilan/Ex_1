@@ -1,17 +1,19 @@
 package com.example.contactsapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -22,19 +24,12 @@ import org.jetbrains.annotations.NotNull;
  * create an instance of this fragment.
  */
 public class DetailsFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String NAME = "name";
-    private static final String PHONE = "phone";
-    private static final String MAIL = "mail";
-    private static final String IMG = "img";
-
-    // TODO: Rename and change types of parameters
-    private String name;
-    private String phone;
-    private String mail;
-    private String img;
+    private static final String CONTACT_NAME = "name";
+    private static final String CONTACT_PHONE = "phone";
+    private static final String CONTACT_MAIL = "mail";
+    private static final String CONTACT_IMG = "img";
+    private static final String CONTACT_ID = "id";
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -46,14 +41,13 @@ public class DetailsFragment extends Fragment {
      *
      * @return A new instance of fragment DetailsFragment.
      */
-    public static Bundle getBundle(String name, String phone, String mail, String img) {
-        //DetailsFragment fragment = new DetailsFragment();
+    public static Bundle getBundle(String name, String phone, String mail, String img, String id) {
         Bundle args = new Bundle();
-        args.putString(NAME, name);
-        args.putString(PHONE, phone);
-        args.putString(MAIL, mail);
-        args.putString(IMG, img);
-        //fragment.setArguments(args);
+        args.putString(CONTACT_NAME, name);
+        args.putString(CONTACT_PHONE, phone);
+        args.putString(CONTACT_MAIL, mail);
+        args.putString(CONTACT_IMG, img);
+        args.putString(CONTACT_ID, id);
         return args;
     }
 
@@ -75,11 +69,6 @@ public class DetailsFragment extends Fragment {
 
     }
 
-    public void backToMain(View view){ // TODO remove
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,10 +79,11 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        name = getArguments().getString(NAME);
-        mail = getArguments().getString(MAIL);
-        phone = getArguments().getString(PHONE);
-        img = getArguments().getString(IMG);
+        String name = getArguments().getString(CONTACT_NAME);
+        String mail = getArguments().getString(CONTACT_MAIL);
+        String phone = getArguments().getString(CONTACT_PHONE);
+        String img = getArguments().getString(CONTACT_IMG);
+        String id = getArguments().getString(CONTACT_ID);
 
         TextView nameTextView = getActivity().findViewById(R.id.nameTextView);
         nameTextView.setText(name);
@@ -104,6 +94,15 @@ public class DetailsFragment extends Fragment {
         TextView phoneTextView = getActivity().findViewById(R.id.phoneTextView);
         phoneTextView.setText(phone);
 
+        Button hideButton = getActivity().findViewById(R.id.hideButton);
+        hideButton.setOnClickListener(view1 -> hideContact(id));
+
         Glide.with(getActivity()).load(img).error(R.drawable.person).placeholder(R.drawable.person).into((ImageView) getActivity().findViewById(R.id.imageView));
+    }
+
+    public void hideContact(String id){
+        ContactViewModel viewModel = new ViewModelProvider(getActivity()).get(ContactViewModel.class);
+        viewModel.onHideContact(id);
+        Toast.makeText(getContext(),"Contact hidden from list",Toast.LENGTH_SHORT).show();
     }
 }

@@ -2,19 +2,9 @@ package com.example.contactsapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavAction;
-import androidx.navigation.NavArgument;
-import androidx.navigation.NavController;
-import androidx.navigation.NavGraph;
-import androidx.navigation.NavHost;
-import androidx.navigation.NavInflater;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -67,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 //            navController.navigate(R.id.listFragment);
             viewModel = new ViewModelProvider(this).get(ContactViewModel.class);
             Log.d("viewModel", viewModel.toString() + " viewModel created");
-            viewModel.onListStart(this, true);
+            viewModel.onListStart(this);
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_contact), CONTACT_PERMISSION, perms);
