@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -22,13 +23,13 @@ public class ContactViewModel extends ViewModel {
     public static final String EXTRA_CONTACT_PHONE = "EXTRA.CONTACT_PHONE";
     public static final String EXTRA_CONTACT_IMG = "EXTRA.CONTACT_IMG";
 
-    //private LiveData<List<Contact>> contacts;
+    private final MutableLiveData<List<Contact>> contacts = new MutableLiveData<>();
 
-    public LiveData<List<Contact>> onListStart(Context context, boolean havePerm){
+    public void onListStart(Context context, boolean havePerm){
 
         if(!havePerm){
             //update ui?
-            return null; // exit
+            return; // exit
         }
 
         @SuppressLint("Recycle") Cursor cursor = context.getContentResolver().query(
@@ -38,7 +39,7 @@ public class ContactViewModel extends ViewModel {
                 null,null
         );
 
-        List<Contact> contacts = new ArrayList<>();
+        List<Contact> loadedContacts = new ArrayList<>();
 
         if (cursor != null) {
             String phone = null;
@@ -71,13 +72,17 @@ public class ContactViewModel extends ViewModel {
                             ContactsContract.CommonDataKinds.Email.ADDRESS));
                 }
 
-                contacts.add(new Contact(cursor.getString(nameIndex),
+                loadedContacts.add(new Contact(cursor.getString(nameIndex),
                         email,
                         phone,
                         cursor.getString(imgIndex)));
             }
         }
 
-        return new MutableLiveData<List<Contact>>(contacts);
+        this.contacts.setValue(loadedContacts);
+    }
+
+    public LiveData<List<Contact>> getContacts(){
+        return this.contacts;
     }
 }

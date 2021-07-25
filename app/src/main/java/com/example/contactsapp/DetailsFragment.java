@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class DetailsFragment extends Fragment {
@@ -47,9 +46,8 @@ public class DetailsFragment extends Fragment {
      *
      * @return A new instance of fragment DetailsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static Bundle getBundle(String name, String phone, String mail, String img) {
-        DetailsFragment fragment = new DetailsFragment();
+        //DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
         args.putString(NAME, name);
         args.putString(PHONE, phone);
@@ -92,10 +90,10 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        name = savedInstanceState.getString(NAME);
-        mail = savedInstanceState.getString(MAIL);
-        phone = savedInstanceState.getString(PHONE);
-        img = savedInstanceState.getString(IMG);
+        name = getArguments().getString(NAME);
+        mail = getArguments().getString(MAIL);
+        phone = getArguments().getString(PHONE);
+        img = getArguments().getString(IMG);
 
         TextView nameTextView = getActivity().findViewById(R.id.nameTextView);
         nameTextView.setText(name);

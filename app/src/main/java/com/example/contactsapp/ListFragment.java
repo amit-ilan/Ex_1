@@ -37,7 +37,9 @@ public class ListFragment extends Fragment implements ContactClickListener{
     private String mParam2;
 
     CustomAdapter adapter;
-    List<Contact> contacts;
+    ContactViewModel viewModel;
+    //List<Contact> contacts;
+
 
     public ListFragment() {
     }
@@ -63,11 +65,6 @@ public class ListFragment extends Fragment implements ContactClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ContactViewModel model = new ViewModelProvider(requireActivity()).get(ContactViewModel.class);
-        model.onListStart(getActivity(), true).observe(this, contacts -> {
-            this.contacts = contacts;
-            Log.d("1", "aaa");
-        });
     }
 
     @Override
@@ -80,12 +77,15 @@ public class ListFragment extends Fragment implements ContactClickListener{
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // set up the RecyclerView
-        RecyclerView recyclerView = view.findViewById(R.id.rvContacts);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new CustomAdapter(contacts, this, getActivity());
-        recyclerView.setAdapter(adapter);
-
+        viewModel = new ViewModelProvider(getActivity()).get(ContactViewModel.class);
+        Log.d("viewModel", viewModel.toString() + " viewModel created");
+        viewModel.getContacts().observe(getActivity(), contacts -> {
+            // set up the RecyclerView
+            RecyclerView recyclerView = view.findViewById(R.id.rvContacts);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            adapter = new CustomAdapter(contacts, this, getActivity());
+            recyclerView.setAdapter(adapter);
+        });
     }
 
     @Override
