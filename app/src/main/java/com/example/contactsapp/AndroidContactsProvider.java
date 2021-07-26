@@ -3,6 +3,7 @@ package com.example.contactsapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 
 import java.util.HashMap;
@@ -30,25 +31,8 @@ public class AndroidContactsProvider implements ContactsProvider {
             while (cursor.moveToNext()) {
                 String id = cursor.getString(idIndex);
 
-                Cursor pCur = context.getContentResolver().query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        new String[]{id}, null);
-                while (pCur.moveToNext()) {
-                    phone = pCur.getString(pCur.getColumnIndex(
-                            ContactsContract.CommonDataKinds.Phone.NUMBER));
-                }
-
-                Cursor eCur = context.getContentResolver().query(
-                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                        new String[]{id}, null);
-                while (eCur.moveToNext()) {
-                    email = eCur.getString(eCur.getColumnIndex(
-                            ContactsContract.CommonDataKinds.Email.ADDRESS));
-                }
+                phone = getProperty(context, id, ContactsContract.CommonDataKinds.Phone.CONTENT_URI, ContactsContract.CommonDataKinds.Phone.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.NUMBER);
+                email = getProperty(context, id, ContactsContract.CommonDataKinds.Email.CONTENT_URI, ContactsContract.CommonDataKinds.Email.CONTACT_ID, ContactsContract.CommonDataKinds.Email.ADDRESS);
 
                 contacts.put(id, new Contact(cursor.getString(nameIndex),
                             email,
@@ -58,5 +42,19 @@ public class AndroidContactsProvider implements ContactsProvider {
             }
         }
         return contacts;
+    }
+
+    private String getProperty(Context context, String id, Uri contentUri, String propertySelection, String propertyColumn) {
+        String property = null;
+        Cursor cursor = context.getContentResolver().query(
+                contentUri,
+                null,
+                propertySelection+ " = ?",
+                new String[]{id},
+                null);
+        while (cursor.moveToNext()) {
+            property = cursor.getString(cursor.getColumnIndex(propertyColumn));
+        }
+        return property;
     }
 }
