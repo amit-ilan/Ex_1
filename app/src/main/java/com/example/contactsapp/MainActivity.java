@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 //            navController.navigate(R.id.listFragment);
             viewModel = new ViewModelProvider(this).get(ContactViewModel.class);
             Log.d("viewModel", viewModel.toString() + " viewModel created");
-            viewModel.onListStart(this);
+            viewModel.onListStart(this, new AndroidContactsProvider());
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_contact), CONTACT_PERMISSION, perms);

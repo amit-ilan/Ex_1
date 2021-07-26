@@ -25,56 +25,11 @@ public class ContactViewModel extends ViewModel {
     private HashMap<String, Contact> contactsMap = new HashMap<>();
     private List<String> hiddenContacts = new ArrayList<>();
 
-    public void onListStart(Context context){
-        @SuppressLint("Recycle") Cursor cursor = context.getContentResolver().query(
-                ContactsContract.Contacts.CONTENT_URI,
-                null,
-                null,
-                null,null
-        );
+    public void onListStart(Context context, ContactsProvider contactsProvider){
+        HashMap<String, Contact> loadedContacts = contactsProvider.getContacts(context);
 
-        HashMap<String, Contact> loadedContacts = new HashMap<>();
-
-        if (cursor != null) {
-            String phone = null;
-            String email = null;
-
-            int idIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-            int nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-            int imgIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
-
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(idIndex);
-
-                Cursor pCur = context.getContentResolver().query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        new String[]{id}, null);
-                while (pCur.moveToNext()) {
-                    phone = pCur.getString(pCur.getColumnIndex(
-                            ContactsContract.CommonDataKinds.Phone.NUMBER));
-                }
-
-                Cursor eCur = context.getContentResolver().query(
-                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                        new String[]{id}, null);
-                while (eCur.moveToNext()) {
-                    email = eCur.getString(eCur.getColumnIndex(
-                            ContactsContract.CommonDataKinds.Email.ADDRESS));
-                }
-
-                if (!hiddenContacts.contains(id)) {
-
-                    loadedContacts.put(id, new Contact(cursor.getString(nameIndex),
-                            email,
-                            phone,
-                            cursor.getString(imgIndex),
-                            id));
-                }
-            }
+        for (String id: this.hiddenContacts){
+            loadedContacts.remove(id);
         }
 
         this.contactsMap = loadedContacts;
