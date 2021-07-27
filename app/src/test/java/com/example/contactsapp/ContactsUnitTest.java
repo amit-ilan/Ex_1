@@ -63,5 +63,13 @@ public class ContactsUnitTest {
         viewModel.onHideContact(removeId);
         assertTrue(Iterables.elementsEqual(viewModel.getContacts().getValue(), expected.values()));
     }
+
+    @Test
+    public void hideContactEmptyList(){
+        ContactsProvider emptyContactsProvider = new EmptyContactProvider();
+        viewModel.onListStart(mockContext, emptyContactsProvider);
+        viewModel.onHideContact("FAKE_ID");
+        assertTrue(viewModel.getContacts().getValue().size() == 0);
+    }
 }
 

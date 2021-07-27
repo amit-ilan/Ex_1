@@ -48,6 +48,7 @@ public class ContactViewModel extends ViewModel {
      * @param contactId contact to hide
      */
     public void onHideContact(String contactId){
+        if(!this.contactsMap.keySet().contains(contactId)) {return;}
         this.hiddenContacts.add(contactId);
         this.contactsMap.remove(contactId);
         this.contactsLiveData.setValue(new ArrayList<>(this.contactsMap.values()));
