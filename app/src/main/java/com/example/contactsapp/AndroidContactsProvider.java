@@ -8,6 +8,9 @@ import android.provider.ContactsContract;
 
 import java.util.HashMap;
 
+/**
+ * Provides contacts list from android device
+ */
 public class AndroidContactsProvider implements ContactsProvider {
     @Override
     public HashMap<String, Contact> getContacts(Context context) {
@@ -44,6 +47,15 @@ public class AndroidContactsProvider implements ContactsProvider {
         return contacts;
     }
 
+    /**
+     * Get required property (phone, email..) of required contact from given chart
+     * @param context
+     * @param id id of contact
+     * @param contentUri chart to query
+     * @param propertySelection selection for the query
+     * @param propertyColumn column of required property
+     * @return value of the property
+     */
     private String getProperty(Context context, String id, Uri contentUri, String propertySelection, String propertyColumn) {
         String property = null;
         Cursor cursor = context.getContentResolver().query(

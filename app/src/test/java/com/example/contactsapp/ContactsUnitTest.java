@@ -1,12 +1,7 @@
 package com.example.contactsapp;
 
 import android.content.Context;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
-import androidx.test.core.app.ApplicationProvider;
 
 import com.google.common.collect.Iterables;
 
@@ -16,17 +11,9 @@ import org.junit.Test;
 
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -48,34 +35,33 @@ public class ContactsUnitTest {
             new InstantTaskExecutorRule();
 
     @Before
-    public void init(){ // TODO - is it before every test? wastefull to create new instances?
+    public void init(){
         viewModel = new ContactViewModel();
         testContactProvider = new TestContactProvider();
         viewModel.getContacts().observeForever(viewModelContacts -> {});
+        viewModel.onListStart(mockContext, testContactProvider);
         //ApplicationProvider.getApplicationContext();
     }
 
     @Test
-    public void getContacts() {
-        viewModel.onListStart(mockContext, testContactProvider);
-        assertTrue(Iterables.elementsEqual(viewModel.getContacts().getValue(), testContactProvider.getContacts(mockContext).values()));
+    public void equalsContacts(){
+        Contact a = new Contact("A", "A@l.com", "111-111","","1");
+        Contact b = new Contact("A", "A@l.com", "111-111","","1");
+        assertEquals(a,b);
+    }
 
-//        for(Contact c:viewModel.getContacts().getValue()){
-//            Log.d("TAG1", c.getName());
-//            System.out.println(c.getName());
-//        }
-//        for(Contact c:testContactProvider.getContacts(mockContext).values()){
-//            Log.d("TAG2", c.getName());
-//        }
+    @Test
+    public void getContacts() {
+        assertTrue(Iterables.elementsEqual(viewModel.getContacts().getValue(), testContactProvider.getContacts(mockContext).values()));
     }
 
     @Test
     public void getContactAfterHidden(){
-        String removeId = testContactProvider.getContacts(mockContext).keySet().iterator().next();
+        HashMap<String, Contact> expected = testContactProvider.getContacts(mockContext);
+        String removeId = expected.keySet().iterator().next();
+        expected.remove(removeId);
         viewModel.onHideContact(removeId);
-        for (Contact contact : viewModel.getContacts().getValue()){ // TODO more efficient way?
-            assertTrue(!contact.getDeviceId().equals(removeId));
-        }
+        assertTrue(Iterables.elementsEqual(viewModel.getContacts().getValue(), expected.values()));
     }
 }
 

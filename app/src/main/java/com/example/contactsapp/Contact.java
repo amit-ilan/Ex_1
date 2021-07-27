@@ -1,6 +1,11 @@
 package com.example.contactsapp;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Contact implements Serializable {
     private String name;
@@ -55,5 +60,24 @@ public class Contact implements Serializable {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(name, contact.name) &&
+                Objects.equals(mail, contact.mail) &&
+                Objects.equals(phone, contact.phone) &&
+                Objects.equals(img, contact.img) &&
+                Objects.equals(deviceId, contact.deviceId);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, mail, phone, img, deviceId);
     }
 }

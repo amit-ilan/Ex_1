@@ -20,11 +20,9 @@ import com.bumptech.glide.Glide;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Views details of one contact.
  */
 public class DetailsFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String CONTACT_NAME = "name";
     private static final String CONTACT_PHONE = "phone";
     private static final String CONTACT_MAIL = "mail";
@@ -54,19 +52,6 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            name = getArguments().getString(NAME);
-//            phone = getArguments().getString(PHONE);
-//            mail = getArguments().getString(MAIL);
-//            img = getArguments().getString(IMG);
-//        }
-
-//        Intent intent = getActivity().getIntent();
-//        String name = intent.getStringExtra(ContactViewModel.EXTRA_CONTACT_NAME);
-//        String mail = intent.getStringExtra(ContactViewModel.EXTRA_CONTACT_MAIL);
-//        String phone = intent.getStringExtra(ContactViewModel.EXTRA_CONTACT_PHONE);
-//        String img = intent.getStringExtra(ContactViewModel.EXTRA_CONTACT_IMG);
-
     }
 
     @Override
@@ -100,6 +85,10 @@ public class DetailsFragment extends Fragment {
         Glide.with(getActivity()).load(img).error(R.drawable.person).placeholder(R.drawable.person).into((ImageView) getActivity().findViewById(R.id.imageView));
     }
 
+    /**
+     * Hides given contact, called when HIDE button pressed
+     * @param id of contact to remove
+     */
     public void hideContact(String id){
         ContactViewModel viewModel = new ViewModelProvider(getActivity()).get(ContactViewModel.class);
         viewModel.onHideContact(id);

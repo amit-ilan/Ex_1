@@ -86,13 +86,5 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             textView = (TextView) view.findViewById(R.id.contact_name);
             imageView = (ImageView) view.findViewById(R.id.contact_img);
         }
-
-        public TextView getTextView() {
-            return textView;
-        }
-
-        public ImageView getImageView() {
-            return imageView;
-        }
     }
 }

@@ -4,6 +4,9 @@ import android.content.Context;
 
 import java.util.HashMap;
 
+/**
+ * Provides a contact list for tests.
+ */
 public class TestContactProvider implements ContactsProvider{
     @Override
     public HashMap<String, Contact> getContacts(Context context) {

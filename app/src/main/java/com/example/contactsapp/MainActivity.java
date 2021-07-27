@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     private static final int CONTACT_PERMISSION = 123;
 
-
     ContactViewModel viewModel;
 
     @Override
@@ -51,9 +50,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         String[] perms = {Manifest.permission.READ_CONTACTS};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission
-//            NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-//            NavController navController = navHostFragment.getNavController();
-//            navController.navigate(R.id.listFragment);
             viewModel = new ViewModelProvider(this).get(ContactViewModel.class);
             viewModel.onListStart(this, new AndroidContactsProvider());
         } else {
@@ -93,9 +89,4 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
-
-
-}
-interface ContactClickListener {
-    void onContactClicked(Contact contact);
 }

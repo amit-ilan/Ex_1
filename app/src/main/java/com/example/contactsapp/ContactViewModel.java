@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * Viewmodel for contact app
+ */
 public class ContactViewModel extends ViewModel {
 
     public static final String EXTRA_CONTACT_NAME = "EXTRA.CONTACT_NAME";
@@ -25,6 +27,11 @@ public class ContactViewModel extends ViewModel {
     private HashMap<String, Contact> contactsMap = new HashMap<>();
     private List<String> hiddenContacts = new ArrayList<>();
 
+    /**
+     * Provide contacts list, called when the UI start to view the list.
+     * @param context context of the app
+     * @param contactsProvider to get contacts from
+     */
     public void onListStart(Context context, ContactsProvider contactsProvider){
         HashMap<String, Contact> loadedContacts = contactsProvider.getContacts(context);
 
@@ -36,12 +43,19 @@ public class ContactViewModel extends ViewModel {
         this.contactsLiveData.setValue(new ArrayList<>(loadedContacts.values()));
     }
 
+    /**
+     * Removes contact from the visible contacts list.
+     * @param contactId contact to hide
+     */
     public void onHideContact(String contactId){
         this.hiddenContacts.add(contactId);
         this.contactsMap.remove(contactId);
         this.contactsLiveData.setValue(new ArrayList<>(this.contactsMap.values()));
     }
 
+    /**
+     * @return liveData of the contacts list
+     */
     public LiveData<List<Contact>> getContacts(){
         return this.contactsLiveData;
     }
