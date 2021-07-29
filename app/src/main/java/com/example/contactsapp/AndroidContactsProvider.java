@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 
 import java.util.HashMap;
+
 /**
  * Provides contacts list from android device
  */
