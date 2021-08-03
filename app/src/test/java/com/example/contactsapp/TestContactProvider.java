@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class TestContactProvider implements ContactsProvider {
     @Override
-    public HashMap<String, Contact> getContacts(Context context) {
+    public HashMap<String, Contact> getContacts() {
         return new HashMap<String, Contact>() {{
             put("1", new Contact("A", "A@l.com", "111-111", "", "1"));
             put("2", new Contact("B", "B@l.com", "111-222", "", "2"));

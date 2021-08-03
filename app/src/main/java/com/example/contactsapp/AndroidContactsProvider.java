@@ -12,8 +12,12 @@ import java.util.HashMap;
  * Provides contacts list from android device
  */
 public class AndroidContactsProvider implements ContactsProvider {
+    private final Context context;
+    AndroidContactsProvider(Context context){
+        this.context = context;
+    }
     @Override
-    public HashMap<String, Contact> getContacts(Context context) {
+    public HashMap<String, Contact> getContacts() {
         HashMap<String, Contact> contacts = new HashMap<>();
 
         @SuppressLint("Recycle") Cursor cursor = context.getContentResolver().query(

@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewModel = new ViewModelProvider(this).get(ContactViewModel.class);
-
-        setContactPermission();
     }
 
     @Override
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission
             viewModel = new ViewModelProvider(this).get(ContactViewModel.class);
-            viewModel.onListStart(this, new AndroidContactsProvider());
+            viewModel.onListStart(new AndroidContactsProvider(this));
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_contact), CONTACT_PERMISSION, perms);

@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class EmptyContactProvider implements ContactsProvider {
     @Override
-    public HashMap<String, Contact> getContacts(Context context) {
+    public HashMap<String, Contact> getContacts() {
         return new HashMap<>();
     }
 }

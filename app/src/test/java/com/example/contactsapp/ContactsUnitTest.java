@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -41,7 +42,7 @@ public class ContactsUnitTest {
         testContactProvider = new TestContactProvider();
         viewModel.getContacts().observeForever(viewModelContacts -> {
         });
-        viewModel.onListStart(mockContext, testContactProvider);
+        viewModel.onListStart(testContactProvider);
         //ApplicationProvider.getApplicationContext();
     }
 
@@ -54,24 +55,24 @@ public class ContactsUnitTest {
 
     @Test
     public void getContacts() {
-        assertTrue(Iterables.elementsEqual(viewModel.getContacts().getValue(), testContactProvider.getContacts(mockContext).values()));
+        assertTrue(Iterables.elementsEqual(Objects.requireNonNull(viewModel.getContacts().getValue()), testContactProvider.getContacts().values()));
     }
 
     @Test
     public void getContactAfterHidden() {
-        HashMap<String, Contact> expected = testContactProvider.getContacts(mockContext);
+        HashMap<String, Contact> expected = testContactProvider.getContacts();
         String removeId = expected.keySet().iterator().next();
         expected.remove(removeId);
         viewModel.onHideContact(removeId);
-        assertTrue(Iterables.elementsEqual(viewModel.getContacts().getValue(), expected.values()));
+        assertTrue(Iterables.elementsEqual(Objects.requireNonNull(viewModel.getContacts().getValue()), expected.values()));
     }
 
     @Test
     public void hideContactEmptyList() {
         ContactsProvider emptyContactsProvider = new EmptyContactProvider();
-        viewModel.onListStart(mockContext, emptyContactsProvider);
+        viewModel.onListStart(emptyContactsProvider);
         viewModel.onHideContact("FAKE_ID");
-        assertTrue(viewModel.getContacts().getValue().size() == 0);
+        assertEquals(0, Objects.requireNonNull(viewModel.getContacts().getValue()).size());
     }
 }
 

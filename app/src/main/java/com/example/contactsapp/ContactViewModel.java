@@ -24,8 +24,8 @@ public class ContactViewModel extends ViewModel {
      * @param context          context of the app
      * @param contactsProvider to get contacts from
      */
-    public void onListStart(Context context, ContactsProvider contactsProvider) {
-        HashMap<String, Contact> loadedContacts = contactsProvider.getContacts(context);
+    public void onListStart(ContactsProvider contactsProvider) {
+        HashMap<String, Contact> loadedContacts = contactsProvider.getContacts();
 
         for (String id : this.hiddenContacts) {
             loadedContacts.remove(id);
