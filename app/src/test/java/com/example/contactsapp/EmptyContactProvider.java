@@ -4,9 +4,9 @@ import android.content.Context;
 
 import java.util.HashMap;
 
-public class EmptyContactProvider implements ContactsProvider{
+public class EmptyContactProvider implements ContactsProvider {
     @Override
     public HashMap<String, Contact> getContacts(Context context) {
-        return new HashMap<String, Contact>();
+        return new HashMap<>();
     }
 }

@@ -8,13 +8,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Contact implements Serializable {
-    private String name;
-    private String mail;
-    private String phone;
-    private String img;
-    private String deviceId;
+    private final String name;
+    private final String mail;
+    private final String phone;
+    private final String img;
+    private final String deviceId;
 
-    public Contact(String name, String mail, String phone, String img, String deviceId){
+    public Contact(String name, String mail, String phone, String img, String deviceId) {
         this.name = name;
         this.mail = mail;
         this.phone = phone;
@@ -40,26 +40,6 @@ public class Contact implements Serializable {
 
     public String getDeviceId() {
         return deviceId;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

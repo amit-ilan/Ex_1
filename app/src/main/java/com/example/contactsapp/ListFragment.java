@@ -18,15 +18,13 @@ import android.view.ViewGroup;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
  * Viewa list of all contacts.
  */
-public class ListFragment extends Fragment implements ContactClickListener{
+public class ListFragment extends Fragment implements ContactClickListener {
 
-    CustomAdapter adapter;
-    ContactViewModel viewModel;
+    private CustomAdapter adapter;
+    private ContactViewModel viewModel;
 
     public ListFragment() {
     }
@@ -46,9 +44,9 @@ public class ListFragment extends Fragment implements ContactClickListener{
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(getActivity()).get(ContactViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ContactViewModel.class);
         Log.d("viewModel", viewModel.toString() + " viewModel created");
-        viewModel.getContacts().observe(getActivity(), contacts -> {
+        viewModel.getContacts().observe(requireActivity(), contacts -> {
             // set up the RecyclerView
             RecyclerView recyclerView = view.findViewById(R.id.rvContacts);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -59,12 +57,14 @@ public class ListFragment extends Fragment implements ContactClickListener{
 
     /**
      * Moves to details fragment of given contact
+     *
      * @param contact to show
      */
     @Override
     public void onContactClicked(Contact contact) {
         NavHostFragment navHostFragment =
-                (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         String name = contact.getName();
         String phone = contact.getPhone();
@@ -72,11 +72,7 @@ public class ListFragment extends Fragment implements ContactClickListener{
         String img = contact.getImg();
         String id = contact.getDeviceId();
 
-        Bundle bundle = DetailsFragment.getBundle(name,phone,mail,img, id);
+        Bundle bundle = DetailsFragment.getBundle(name, phone, mail, img, id);
         navController.navigate(R.id.action_listFragment_to_detailsFragment, bundle);
     }
-}
-
-interface ContactClickListener {
-    void onContactClicked(Contact contact);
 }

@@ -11,20 +11,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
-    private List<Contact> localDataSet;
+    private final List<Contact> localDataSet;
     private final ContactClickListener contactClickListener;
-    private Context context;
+    private final Context context;
 
     /**
      * Initialize the dataset of the Adapter.
      *
      * @param dataSet              String[] containing the data to populate views to be used
      *                             by RecyclerView.
-     * @param contactClickListener
+     * @param contactClickListener defined the behavior when item clicked
      */
     public CustomAdapter(List<Contact> dataSet, ContactClickListener contactClickListener, Context context) {
         localDataSet = dataSet;
@@ -35,7 +37,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public @NotNull ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.contant_item, viewGroup, false);
@@ -55,13 +57,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         String img = contact.getImg();
         Glide.with(this.context).load(img).error(R.drawable.person).placeholder(R.drawable.person).into(viewHolder.imageView);
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //option 1: open activity here
-                //option 2 move the event up in the chain
-                contactClickListener.onContactClicked(contact);
-            }
+        viewHolder.itemView.setOnClickListener(v -> {
+            //option 1: open activity here
+            //option 2 move the event up in the chain
+            contactClickListener.onContactClicked(contact);
         });
 
     }
@@ -77,7 +76,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
         private final ImageView imageView;
 

@@ -1,6 +1,7 @@
 package com.example.contactsapp;
 
 import android.content.Context;
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.google.common.collect.Iterables;
@@ -35,19 +36,20 @@ public class ContactsUnitTest {
             new InstantTaskExecutorRule();
 
     @Before
-    public void init(){
+    public void init() {
         viewModel = new ContactViewModel();
         testContactProvider = new TestContactProvider();
-        viewModel.getContacts().observeForever(viewModelContacts -> {});
+        viewModel.getContacts().observeForever(viewModelContacts -> {
+        });
         viewModel.onListStart(mockContext, testContactProvider);
         //ApplicationProvider.getApplicationContext();
     }
 
     @Test
-    public void equalsContacts(){
-        Contact a = new Contact("A", "A@l.com", "111-111","","1");
-        Contact b = new Contact("A", "A@l.com", "111-111","","1");
-        assertEquals(a,b);
+    public void equalsContacts() {
+        Contact a = new Contact("A", "A@l.com", "111-111", "", "1");
+        Contact b = new Contact("A", "A@l.com", "111-111", "", "1");
+        assertEquals(a, b);
     }
 
     @Test
@@ -56,7 +58,7 @@ public class ContactsUnitTest {
     }
 
     @Test
-    public void getContactAfterHidden(){
+    public void getContactAfterHidden() {
         HashMap<String, Contact> expected = testContactProvider.getContacts(mockContext);
         String removeId = expected.keySet().iterator().next();
         expected.remove(removeId);
@@ -65,7 +67,7 @@ public class ContactsUnitTest {
     }
 
     @Test
-    public void hideContactEmptyList(){
+    public void hideContactEmptyList() {
         ContactsProvider emptyContactsProvider = new EmptyContactProvider();
         viewModel.onListStart(mockContext, emptyContactsProvider);
         viewModel.onHideContact("FAKE_ID");

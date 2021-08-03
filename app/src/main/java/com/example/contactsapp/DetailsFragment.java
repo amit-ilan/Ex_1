@@ -64,34 +64,36 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        assert getArguments() != null;
         String name = getArguments().getString(CONTACT_NAME);
         String mail = getArguments().getString(CONTACT_MAIL);
         String phone = getArguments().getString(CONTACT_PHONE);
         String img = getArguments().getString(CONTACT_IMG);
         String id = getArguments().getString(CONTACT_ID);
 
-        TextView nameTextView = getActivity().findViewById(R.id.nameTextView);
+        TextView nameTextView = requireActivity().findViewById(R.id.nameTextView);
         nameTextView.setText(name);
 
-        TextView mailTextView = getActivity().findViewById(R.id.mailTextView);
+        TextView mailTextView = requireActivity().findViewById(R.id.mailTextView);
         mailTextView.setText(mail);
 
-        TextView phoneTextView = getActivity().findViewById(R.id.phoneTextView);
+        TextView phoneTextView = requireActivity().findViewById(R.id.phoneTextView);
         phoneTextView.setText(phone);
 
-        Button hideButton = getActivity().findViewById(R.id.hideButton);
+        Button hideButton = requireActivity().findViewById(R.id.hideButton);
         hideButton.setOnClickListener(view1 -> hideContact(id));
 
-        Glide.with(getActivity()).load(img).error(R.drawable.person).placeholder(R.drawable.person).into((ImageView) getActivity().findViewById(R.id.imageView));
+        Glide.with(requireActivity()).load(img).error(R.drawable.person).placeholder(R.drawable.person).into((ImageView) requireActivity().findViewById(R.id.imageView));
     }
 
     /**
      * Hides given contact, called when HIDE button pressed
+     *
      * @param id of contact to remove
      */
-    public void hideContact(String id){
-        ContactViewModel viewModel = new ViewModelProvider(getActivity()).get(ContactViewModel.class);
+    public void hideContact(String id) {
+        ContactViewModel viewModel = new ViewModelProvider(requireActivity()).get(ContactViewModel.class);
         viewModel.onHideContact(id);
-        Toast.makeText(getContext(),"Contact hidden from list",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Contact hidden from list", Toast.LENGTH_SHORT).show();
     }
 }
