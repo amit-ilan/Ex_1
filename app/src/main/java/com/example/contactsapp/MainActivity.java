@@ -46,8 +46,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         String[] perms = {Manifest.permission.READ_CONTACTS};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission
-            viewModel = new ViewModelProvider(this).get(ContactViewModel.class);
-            viewModel.onListStart(new AndroidContactsProvider(this));
+            viewModel.onListStart(AndroidContactsProvider.getInstance(this));
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_contact), CONTACT_PERMISSION, perms);

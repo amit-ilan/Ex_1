@@ -13,9 +13,20 @@ import java.util.HashMap;
  */
 public class AndroidContactsProvider implements ContactsProvider {
     private final Context context;
-    AndroidContactsProvider(Context context){
+    @SuppressLint("StaticFieldLeak")
+    private static AndroidContactsProvider instance = null;
+
+    private AndroidContactsProvider(Context context) {
         this.context = context;
     }
+
+    public static AndroidContactsProvider getInstance(Context context) {
+        if (instance == null) {
+            instance = new AndroidContactsProvider(context);
+        }
+        return instance;
+    }
+
     @Override
     public HashMap<String, Contact> getContacts() {
         HashMap<String, Contact> contacts = new HashMap<>();
